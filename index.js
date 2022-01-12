@@ -26,9 +26,11 @@ export default () => {
     physicsIds.push(physicsId);
 */
 
+    const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
+
     const geometry = new THREE.BoxGeometry(1, 1, 1)
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-    const material = new THREE.MeshStandardMaterial({ color: 0xff0000 })
+    const material = new THREE.MeshStandardMaterial({ map })
     const cube = new THREE.Mesh(geometry, material)
     window.cube = cube
     //const cube = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 20, 10 ), material );
@@ -54,6 +56,8 @@ export default () => {
     console.log('-parameter numPositions: ', geometry.attributes.position.count * 3)
     console.log('-parameter normals: ', geometry.attributes.normal.array)
     console.log('-parameter numNormals: ', geometry.attributes.normal.count * 3)
+    console.log('-parameter uvs: ', geometry.attributes.uv.array)
+    console.log('-parameter numUvs: ', geometry.attributes.uv.count * 2)
     console.log('-parameter faces: ', index.array)
     console.log('-parameter numFaces: ', index.count)
     console.log('-parameter position: ', planePosition)
@@ -64,6 +68,8 @@ export default () => {
       geometry.attributes.position.count * 3, 
       geometry.attributes.normal.array, 
       geometry.attributes.normal.count * 3, 
+      geometry.attributes.uv.array,
+      geometry.attributes.uv.count * 2,
       index.array, 
       index.count, 
 
@@ -82,6 +88,9 @@ export default () => {
     const normals1 = res.outNormals.slice(0, res.numOutNormals[0])
     const normals2 = res.outNormals.slice(res.numOutNormals[0], res.numOutNormals[0] + res.numOutNormals[1])
 
+    const uvs1 = res.outUvs.slice(0, res.numOutUvs[0])
+    const uvs2 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
+
     const faces1 = res.outFaces.slice(0, res.numOutFaces[0])
     const faces2 = res.outFaces.slice(res.numOutFaces[0], res.numOutFaces[0] + res.numOutFaces[1])
 
@@ -89,9 +98,10 @@ export default () => {
     geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
     geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
+    geometry2.setAttribute('uv', new THREE.Float32BufferAttribute(uvs1, 2))
 
     // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
-    const material2 = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
+    const material2 = new THREE.MeshStandardMaterial({ map, side: THREE.DoubleSide })
     const cube2 = new THREE.Mesh(geometry2, material2)
     window.cube2 = cube2
     cube2.position.set(0, 1, 0)
@@ -107,9 +117,10 @@ export default () => {
     geometry3.setIndex(new THREE.Uint32BufferAttribute(faces2, 1))
     geometry3.setAttribute('position', new THREE.Float32BufferAttribute(positions2, 3))
     geometry3.setAttribute('normal', new THREE.Float32BufferAttribute(normals2, 3))
+    geometry3.setAttribute('uv', new THREE.Float32BufferAttribute(uvs2, 2))
 
     // const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
-    const material3 = new THREE.MeshStandardMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
+    const material3 = new THREE.MeshStandardMaterial({ map, side: THREE.DoubleSide })
     const cube3 = new THREE.Mesh(geometry3, material3)
     window.cube3 = cube3
     cube3.position.set(0, 1, 0)
