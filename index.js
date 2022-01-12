@@ -59,6 +59,8 @@ export default () => {
     const res = physics.cutMesh(
       geometry.attributes.position.array, 
       geometry.attributes.position.count * 3, 
+      geometry.attributes.normal.array, 
+      geometry.attributes.normal.count * 3, 
       index.array, 
       index.count, 
       planePosition, 
@@ -73,6 +75,9 @@ export default () => {
     const positions1 = res.outPositions.slice(0, res.numOutPositions[0])
     const positions2 = res.outPositions.slice(res.numOutPositions[0], res.numOutPositions[0] + res.numOutPositions[1])
 
+    const normals1 = res.outNormals.slice(0, res.numOutNormals[0])
+    const normals2 = res.outNormals.slice(res.numOutNormals[0], res.numOutNormals[0] + res.numOutNormals[1])
+
     const faces1 = res.outFaces.slice(0, res.numOutFaces[0])
     const faces2 = res.outFaces.slice(res.numOutFaces[0], res.numOutFaces[0] + res.numOutFaces[1])
 
@@ -84,6 +89,7 @@ export default () => {
     geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
 
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
+    geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
 
     // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
     const material2 = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
