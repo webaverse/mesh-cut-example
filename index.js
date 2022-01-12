@@ -30,9 +30,10 @@ export default () => {
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const material = new THREE.MeshStandardMaterial({ color: 0xff0000 })
     const cube = new THREE.Mesh(geometry, material)
+    window.cube = cube
     //const cube = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 20, 10 ), material );
     //cube =  new THREE.Mesh( new THREE.TetrahedronGeometry( 0.5, 0 ), material );
-    cube.position.set(2, 1, 0)
+    cube.position.set(5, 1, 0)
 
     app.add(cube)
 
@@ -85,19 +86,15 @@ export default () => {
     const faces2 = res.outFaces.slice(res.numOutFaces[0], res.numOutFaces[0] + res.numOutFaces[1])
 
     const geometry2 = new THREE.BufferGeometry()
-
-    //geometry2.setIndex(faces1);
-    //geometry2.setAttribute('position', positions1);
-
     geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
-
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
     geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
 
     // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
     const material2 = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
     const cube2 = new THREE.Mesh(geometry2, material2)
-    cube2.position.set(-0.2, 1.1, 0)
+    window.cube2 = cube2
+    cube2.position.set(0, 1, 0)
     console.log('geometry2', geometry2)
 
     //debugger;
@@ -109,11 +106,13 @@ export default () => {
     const geometry3 = new THREE.BufferGeometry()
     geometry3.setIndex(new THREE.Uint32BufferAttribute(faces2, 1))
     geometry3.setAttribute('position', new THREE.Float32BufferAttribute(positions2, 3))
+    geometry3.setAttribute('normal', new THREE.Float32BufferAttribute(normals2, 3))
 
     // const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
     const material3 = new THREE.MeshStandardMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
     const cube3 = new THREE.Mesh(geometry3, material3)
-    cube3.position.set(0.2, 0.9, 0)
+    window.cube3 = cube3
+    cube3.position.set(0, 1, 0)
     console.log('geometry3', geometry3)
 
     app.add(cube3)
