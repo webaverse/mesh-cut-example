@@ -51,6 +51,8 @@ export default () => {
 
     console.log('-parameter positions: ', geometry.attributes.position.array)
     console.log('-parameter numPositions: ', geometry.attributes.position.count * 3)
+    console.log('-parameter normals: ', geometry.attributes.normal.array)
+    console.log('-parameter numNormals: ', geometry.attributes.normal.count * 3)
     console.log('-parameter faces: ', index.array)
     console.log('-parameter numFaces: ', index.count)
     console.log('-parameter position: ', planePosition)
@@ -63,6 +65,7 @@ export default () => {
       geometry.attributes.normal.count * 3, 
       index.array, 
       index.count, 
+
       planePosition, 
       planeQuaternion, 
       planeScale
