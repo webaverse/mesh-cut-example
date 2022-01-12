@@ -27,7 +27,8 @@ export default () => {
 */
 
     const geometry = new THREE.BoxGeometry(1, 1, 1)
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+    const material = new THREE.MeshStandardMaterial({ color: 0xff0000 })
     const cube = new THREE.Mesh(geometry, material)
     //const cube = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 20, 10 ), material );
     //cube =  new THREE.Mesh( new THREE.TetrahedronGeometry( 0.5, 0 ), material );
@@ -37,7 +38,7 @@ export default () => {
 
     cube.updateMatrixWorld()
 
-    const attrPos = cube.geometry.getAttribute('position')
+    // const attrPos = cube.geometry.getAttribute('position')
     const planePosition = new THREE.Vector3(0, 0, 0)
     const planeQuaternion = new THREE.Quaternion(0, 1, 0, 0)
     const planeScale = new THREE.Vector3(1, 1, 1)
@@ -46,7 +47,24 @@ export default () => {
 
     const index = cube.geometry.getIndex()
 
-    const res = physics.cutMesh(attrPos.array, attrPos.count * 3, index.array, index.count, planePosition, planeQuaternion, planeScale)
+    console.log('-geometry: ', geometry)
+
+    console.log('-parameter positions: ', geometry.attributes.position.array)
+    console.log('-parameter numPositions: ', geometry.attributes.position.count * 3)
+    console.log('-parameter faces: ', index.array)
+    console.log('-parameter numFaces: ', index.count)
+    console.log('-parameter position: ', planePosition)
+    console.log('-parameter quaternion: ', planeQuaternion)
+    console.log('-parameter scale: ', planeScale)
+    const res = physics.cutMesh(
+      geometry.attributes.position.array, 
+      geometry.attributes.position.count * 3, 
+      index.array, 
+      index.count, 
+      planePosition, 
+      planeQuaternion, 
+      planeScale
+    )
 
     console.log(res)
 
@@ -67,9 +85,11 @@ export default () => {
 
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
 
-    const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
+    // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
+    const material2 = new THREE.MeshStandardMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
     const cube2 = new THREE.Mesh(geometry2, material2)
     cube2.position.set(-0.2, 1.1, 0)
+    console.log('geometry2', geometry2)
 
     //debugger;
 
@@ -81,9 +101,11 @@ export default () => {
     geometry3.setIndex(new THREE.Uint32BufferAttribute(faces2, 1))
     geometry3.setAttribute('position', new THREE.Float32BufferAttribute(positions2, 3))
 
-    const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
+    // const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
+    const material3 = new THREE.MeshStandardMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
     const cube3 = new THREE.Mesh(geometry3, material3)
     cube3.position.set(0.2, 0.9, 0)
+    console.log('geometry3', geometry3)
 
     app.add(cube3)
 
