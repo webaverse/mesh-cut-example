@@ -95,7 +95,7 @@ export default () => {
     const faces2 = res.outFaces.slice(res.numOutFaces[0], res.numOutFaces[0] + res.numOutFaces[1])
 
     const geometry2 = new THREE.BufferGeometry()
-    geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
+    // geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
     geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
     geometry2.setAttribute('uv', new THREE.Float32BufferAttribute(uvs1, 2))
@@ -114,7 +114,7 @@ export default () => {
     cube2.updateMatrixWorld()
 
     const geometry3 = new THREE.BufferGeometry()
-    geometry3.setIndex(new THREE.Uint32BufferAttribute(faces2, 1))
+    // geometry3.setIndex(new THREE.Uint32BufferAttribute(faces2, 1))
     geometry3.setAttribute('position', new THREE.Float32BufferAttribute(positions2, 3))
     geometry3.setAttribute('normal', new THREE.Float32BufferAttribute(normals2, 3))
     geometry3.setAttribute('uv', new THREE.Float32BufferAttribute(uvs2, 2))
