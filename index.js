@@ -28,11 +28,14 @@ export default () => {
 
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1)
+    // const geometry = new THREE.BoxGeometry(1, 1, 1)
+    const geometry = new THREE.TorusKnotGeometry(); geometry.scale(0.5, 0.5, 0.5);
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const material = new THREE.MeshStandardMaterial({ map })
     const cube = new THREE.Mesh(geometry, material)
     window.cube = cube
+    cube.castShadow = true
+    cube.receiveShadow = true
     //const cube = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 20, 10 ), material );
     //cube =  new THREE.Mesh( new THREE.TetrahedronGeometry( 0.5, 0 ), material );
     cube.position.set(5, 1, 0)
@@ -101,10 +104,11 @@ export default () => {
     geometry2.setAttribute('uv', new THREE.Float32BufferAttribute(uvs1, 2))
 
     // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
-    const material2 = new THREE.MeshStandardMaterial({ map, side: THREE.DoubleSide })
-    const cube2 = new THREE.Mesh(geometry2, material2)
+    const cube2 = new THREE.Mesh(geometry2, cube.material)
     window.cube2 = cube2
-    cube2.position.set(0, 1, 0)
+    cube2.castShadow = true
+    cube2.receiveShadow = true
+    cube2.position.set(-1, 1, 0)
     console.log('geometry2', geometry2)
 
     //debugger;
@@ -120,10 +124,11 @@ export default () => {
     geometry3.setAttribute('uv', new THREE.Float32BufferAttribute(uvs2, 2))
 
     // const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
-    const material3 = new THREE.MeshStandardMaterial({ map, side: THREE.DoubleSide })
-    const cube3 = new THREE.Mesh(geometry3, material3)
+    const cube3 = new THREE.Mesh(geometry3, cube.material)
     window.cube3 = cube3
-    cube3.position.set(0, 1, 0)
+    cube3.castShadow = true
+    cube3.receiveShadow = true
+    cube3.position.set(0, 1, )
     console.log('geometry3', geometry3)
 
     app.add(cube3)
