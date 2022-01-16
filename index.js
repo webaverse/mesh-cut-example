@@ -33,7 +33,6 @@ export default () => {
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const material = new THREE.MeshStandardMaterial({ map })
     const cube = new THREE.Mesh(geometry, material)
-    window.cube = cube
     cube.castShadow = true
     cube.receiveShadow = true
     //const cube = new THREE.Mesh( new THREE.SphereGeometry( 0.5, 20, 10 ), material );
@@ -94,9 +93,6 @@ export default () => {
     const uvs1 = res.outUvs.slice(0, res.numOutUvs[0])
     const uvs2 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
 
-    const faces1 = res.outFaces.slice(0, res.numOutFaces[0])
-    const faces2 = res.outFaces.slice(res.numOutFaces[0], res.numOutFaces[0] + res.numOutFaces[1])
-
     const geometry2 = new THREE.BufferGeometry()
     // geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
@@ -105,11 +101,10 @@ export default () => {
 
     // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide })
     const cube2 = new THREE.Mesh(geometry2, cube.material)
-    window.cube2 = cube2
     cube2.castShadow = true
     cube2.receiveShadow = true
     cube2.position.set(-1, 1, 0)
-    console.log('geometry2', geometry2)
+    // console.log('geometry2', geometry2)
 
     //debugger;
 
@@ -125,11 +120,10 @@ export default () => {
 
     // const material3 = new THREE.MeshBasicMaterial({ color: 0x0000ff, side: THREE.DoubleSide })
     const cube3 = new THREE.Mesh(geometry3, cube.material)
-    window.cube3 = cube3
     cube3.castShadow = true
     cube3.receiveShadow = true
     cube3.position.set(0, 1, )
-    console.log('geometry3', geometry3)
+    // console.log('geometry3', geometry3)
 
     app.add(cube3)
 
