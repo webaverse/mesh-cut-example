@@ -7,6 +7,7 @@ const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1')
 export default () => {
   const app = useApp()
   const physics = usePhysics()
+  const meshes = [];
 
   ;(async () => {
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
@@ -17,6 +18,7 @@ export default () => {
       side: THREE.DoubleSide,
     })
     const meshToBeCut = new THREE.Mesh(geometryToBeCut, material)
+    meshes.push(meshToBeCut);
     app.add(meshToBeCut)
     meshToBeCut.updateMatrixWorld()
 
@@ -85,18 +87,21 @@ export default () => {
     //
     
     geometries8Parts.forEach((geometry, i) => {
-      const mesh = new THREE.Mesh(geometry, material)
+      const mesh = new THREE.Mesh(geometry, material);
+      meshes.push(mesh);
       const x = i < 4 ? -0.5 : 0.5;
       const y = i % 4 < 2 ? -0.5 : 0.5;
       const z = i % 2 < 1 ? -0.5 : 0.5;
       mesh.position.set(x - 3, y, z);
-      app.add(mesh)
-      mesh.updateMatrixWorld()
+      app.add(mesh);
+      mesh.updateMatrixWorld();
     })
   })()
 
   useCleanup(() => {
-
+    meshes.forEach(mesh => {
+      app.remove(mesh);
+    })
   })
 
   return app
