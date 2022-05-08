@@ -29,9 +29,8 @@ export default () => {
 
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
 
-    const geometryToBeCut = new THREE.BoxGeometry(1, 1, 1)
-    // let geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
-    window.geometryToBeCut = geometryToBeCut;
+    // const geometryToBeCut = new THREE.BoxGeometry(1, 1, 1)
+    const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const material = new THREE.MeshStandardMaterial({ map })
     const cube = new THREE.Mesh(geometryToBeCut, material)
@@ -93,7 +92,6 @@ export default () => {
     const uvs2 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
 
     let geometry2 = new THREE.BufferGeometry()
-    window.geometry2 = geometry2;
     // geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
     geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
     geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
@@ -105,7 +103,6 @@ export default () => {
     cube2.receiveShadow = true
     cube2.position.set(-1, 1, 0)
     // console.log('geometry2', geometry2)
-    window.cube2 = cube2;
 
     //debugger;
 
@@ -125,7 +122,6 @@ export default () => {
     cube3.receiveShadow = true
     cube3.position.set(0, 1, 0)
     // console.log('geometry3', geometry3)
-    window.cube3 = cube3;
 
     app.add(cube3)
 
@@ -135,7 +131,6 @@ export default () => {
     
     // const geometryToBeCut2 = mergeVertices(geometry2);
     const geometryToBeCut2 = geometry2;
-    window.geometryToBeCut2 = geometryToBeCut2;
     {
       const index = geometryToBeCut2.getIndex();
       const planeNormal = new THREE.Vector3(0, 1, 0).normalize().toArray();
@@ -167,7 +162,6 @@ export default () => {
       const uvs2 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
 
       let geometry2 = new THREE.BufferGeometry()
-      window.geometry2 = geometry2;
       // geometry2.setIndex(new THREE.Uint32BufferAttribute(faces1, 1))
       geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
       geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
