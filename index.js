@@ -19,7 +19,6 @@ export default () => {
     const planeNormal = new THREE.Vector3(1, 0, 0).normalize().toArray();
     const planeDistance = 0
 
-    const index = geometryToBeCut.getIndex()
     const res = physics.cutMesh(
       geometryToBeCut.attributes.position.array, 
       geometryToBeCut.attributes.position.count * 3, 
@@ -27,8 +26,8 @@ export default () => {
       geometryToBeCut.attributes.normal.count * 3, 
       geometryToBeCut.attributes.uv.array,
       geometryToBeCut.attributes.uv.count * 2,
-      index?.array, 
-      index?.count, 
+      geometryToBeCut.index?.array, 
+      geometryToBeCut.index?.count, 
 
       planeNormal, 
       planeDistance,
@@ -71,7 +70,7 @@ export default () => {
   })()
 
   useCleanup(() => {
-    
+
   })
 
   return app
