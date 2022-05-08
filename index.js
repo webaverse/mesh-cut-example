@@ -10,8 +10,8 @@ export default () => {
 
   ;(async () => {
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
-    const geometryToBeCut = new THREE.TorusKnotGeometry();
-    geometryToBeCut.scale(0.5, 0.5, 0.5);
+    const geometryToBeCut = new THREE.BoxGeometry();
+    // const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
     const material = new THREE.MeshStandardMaterial({
       map,
       side: THREE.DoubleSide,
@@ -86,7 +86,10 @@ export default () => {
     
     geometries8Parts.forEach((geometry, i) => {
       const mesh = new THREE.Mesh(geometry, material)
-      mesh.position.set(0, 0, -(i + 1) * 2)
+      const x = i < 4 ? -0.5 : 0.5;
+      const y = i % 4 < 2 ? -0.5 : 0.5;
+      const z = i % 2 < 1 ? -0.5 : 0.5;
+      mesh.position.set(x - 3, y, z);
       app.add(mesh)
       mesh.updateMatrixWorld()
     })
