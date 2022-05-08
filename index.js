@@ -44,11 +44,8 @@ export default () => {
     cube.updateMatrixWorld()
 
     // const attrPos = cube.geometry.getAttribute('position')
-    const planePosition = new THREE.Vector3(0, 0, 0)
-    const planeQuaternion = new THREE.Quaternion(0, 1, 0, 0)
-    const planeScale = new THREE.Vector3(1, 1, 1)
-
-    planeQuaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI * 0.2)
+    const planeNormal = new THREE.Vector3(1, 2, 3).normalize().toArray();
+    const planeDistance = 0
 
     const index = cube.geometry.getIndex()
 
@@ -62,9 +59,8 @@ export default () => {
     console.log('-parameter numUvs: ', geometry.attributes.uv.count * 2)
     console.log('-parameter faces: ', index.array)
     console.log('-parameter numFaces: ', index.count)
-    console.log('-parameter position: ', planePosition)
-    console.log('-parameter quaternion: ', planeQuaternion)
-    console.log('-parameter scale: ', planeScale)
+    console.log('-parameter position: ', planeNormal)
+    console.log('-parameter quaternion: ', planeDistance)
     const res = physics.cutMesh(
       geometry.attributes.position.array, 
       geometry.attributes.position.count * 3, 
@@ -75,9 +71,8 @@ export default () => {
       index.array, 
       index.count, 
 
-      planePosition, 
-      planeQuaternion, 
-      planeScale
+      planeNormal, 
+      planeDistance
     )
 
     console.log(res)
