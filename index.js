@@ -12,17 +12,13 @@ export default () => {
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
     const geometryToBeCut = new THREE.TorusKnotGeometry();
     geometryToBeCut.scale(0.5, 0.5, 0.5);
-    const material = new THREE.MeshStandardMaterial({ map })
+    const material = new THREE.MeshStandardMaterial({
+      map,
+      side: THREE.DoubleSide,
+    })
     const meshToBeCut = new THREE.Mesh(geometryToBeCut, material)
     app.add(meshToBeCut)
     meshToBeCut.updateMatrixWorld()
-
-    const resultGeometries = [];
-
-    const plane = new THREE.Plane(
-      new THREE.Vector3(1, 0, 0).normalize(),
-      0,
-    )
 
     const getCutGeometries = (geometry, plane) => {
       const res = physics.cutMesh(
@@ -63,17 +59,37 @@ export default () => {
       return [geometry0, geometry1];
     }
 
-    resultGeometries.push(...getCutGeometries(geometryToBeCut, plane));
+    const geometries2Parts = getCutGeometries(geometryToBeCut, new THREE.Plane(
+      new THREE.Vector3(1, 0, 0).normalize(),
+      0,
+    ));
 
-    const mesh0 = new THREE.Mesh(resultGeometries[0], material)
-    mesh0.position.set(-0.5, 0, 2)
-    app.add(mesh0)
-    mesh0.updateMatrixWorld()
+    const geometries4Parts = [];
+    geometries2Parts.forEach(geometryToBeCut => {
+      const geometries = getCutGeometries(geometryToBeCut, new THREE.Plane(
+        new THREE.Vector3(0, 1, 0).normalize(),
+        0,
+      ));
+      geometries4Parts.push(...geometries);
+    })
 
-    const mesh1 = new THREE.Mesh(resultGeometries[1], material)
-    mesh1.position.set(0.5, 0, 2)
-    app.add(mesh1)
-    mesh1.updateMatrixWorld()
+    const geometries8Parts = [];
+    geometries4Parts.forEach(geometryToBeCut => {
+      const geometries = getCutGeometries(geometryToBeCut, new THREE.Plane(
+        new THREE.Vector3(0, 0, 1).normalize(),
+        0,
+      ));
+      geometries8Parts.push(...geometries);
+    })
+
+    //
+    
+    geometries8Parts.forEach((geometry, i) => {
+      const mesh = new THREE.Mesh(geometry, material)
+      mesh.position.set(0, 0, -(i + 1) * 2)
+      app.add(mesh)
+      mesh.updateMatrixWorld()
+    })
   })()
 
   useCleanup(() => {
