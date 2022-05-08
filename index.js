@@ -10,63 +10,70 @@ export default () => {
 
   ;(async () => {
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
-    const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
+    const geometryToBeCut = new THREE.TorusKnotGeometry();
+    geometryToBeCut.scale(0.5, 0.5, 0.5);
     const material = new THREE.MeshStandardMaterial({ map })
-    const mesh = new THREE.Mesh(geometryToBeCut, material)
-    app.add(mesh)
-    mesh.updateMatrixWorld()
+    const meshToBeCut = new THREE.Mesh(geometryToBeCut, material)
+    app.add(meshToBeCut)
+    meshToBeCut.updateMatrixWorld()
 
-    const planeNormal = new THREE.Vector3(1, 0, 0).normalize().toArray();
-    const planeDistance = 0
+    const resultGeometries = [];
 
-    const res = physics.cutMesh(
-      geometryToBeCut.attributes.position.array, 
-      geometryToBeCut.attributes.position.count * 3, 
-      geometryToBeCut.attributes.normal.array, 
-      geometryToBeCut.attributes.normal.count * 3, 
-      geometryToBeCut.attributes.uv.array,
-      geometryToBeCut.attributes.uv.count * 2,
-      geometryToBeCut.index?.array, 
-      geometryToBeCut.index?.count, 
-
-      planeNormal, 
-      planeDistance,
-
-      !!geometryToBeCut.index
+    const plane = new THREE.Plane(
+      new THREE.Vector3(1, 0, 0).normalize(),
+      0,
     )
 
-    const positions1 = res.outPositions.slice(0, res.numOutPositions[0])
-    const positions2 = res.outPositions.slice(res.numOutPositions[0], res.numOutPositions[0] + res.numOutPositions[1])
+    const getCutGeometries = (geometry, plane) => {
+      const res = physics.cutMesh(
+        geometry.attributes.position.array, 
+        geometry.attributes.position.count * 3, 
+        geometry.attributes.normal.array, 
+        geometry.attributes.normal.count * 3, 
+        geometry.attributes.uv.array,
+        geometry.attributes.uv.count * 2,
+        geometry.index?.array, 
+        geometry.index?.count, 
+  
+        plane.normal.toArray(), 
+        plane.constant,
+  
+        !!geometry.index
+      )
+  
+      const positions0 = res.outPositions.slice(0, res.numOutPositions[0])
+      const positions1 = res.outPositions.slice(res.numOutPositions[0], res.numOutPositions[0] + res.numOutPositions[1])
+  
+      const normals0 = res.outNormals.slice(0, res.numOutNormals[0])
+      const normals1 = res.outNormals.slice(res.numOutNormals[0], res.numOutNormals[0] + res.numOutNormals[1])
+  
+      const uvs0 = res.outUvs.slice(0, res.numOutUvs[0])
+      const uvs1 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
+  
+      const geometry0 = new THREE.BufferGeometry()
+      geometry0.setAttribute('position', new THREE.Float32BufferAttribute(positions0, 3))
+      geometry0.setAttribute('normal', new THREE.Float32BufferAttribute(normals0, 3))
+      geometry0.setAttribute('uv', new THREE.Float32BufferAttribute(uvs0, 2))
+  
+      const geometry1 = new THREE.BufferGeometry()
+      geometry1.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
+      geometry1.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
+      geometry1.setAttribute('uv', new THREE.Float32BufferAttribute(uvs1, 2))
 
-    const normals1 = res.outNormals.slice(0, res.numOutNormals[0])
-    const normals2 = res.outNormals.slice(res.numOutNormals[0], res.numOutNormals[0] + res.numOutNormals[1])
+      return [geometry0, geometry1];
+    }
 
-    const uvs1 = res.outUvs.slice(0, res.numOutUvs[0])
-    const uvs2 = res.outUvs.slice(res.numOutUvs[0], res.numOutUvs[0] + res.numOutUvs[1])
+    resultGeometries.push(...getCutGeometries(geometryToBeCut, plane));
 
-    const geometry2 = new THREE.BufferGeometry()
-    geometry2.setAttribute('position', new THREE.Float32BufferAttribute(positions1, 3))
-    geometry2.setAttribute('normal', new THREE.Float32BufferAttribute(normals1, 3))
-    geometry2.setAttribute('uv', new THREE.Float32BufferAttribute(uvs1, 2))
+    const mesh0 = new THREE.Mesh(resultGeometries[0], material)
+    mesh0.position.set(-0.5, 0, 2)
+    app.add(mesh0)
+    mesh0.updateMatrixWorld()
 
-    const mesh2 = new THREE.Mesh(geometry2, material)
-    mesh2.castShadow = true
-    mesh2.receiveShadow = true
-    mesh2.position.set(-1, 1, 0)
-    app.add(mesh2)
-    mesh2.updateMatrixWorld()
-
-    const geometry3 = new THREE.BufferGeometry()
-    geometry3.setAttribute('position', new THREE.Float32BufferAttribute(positions2, 3))
-    geometry3.setAttribute('normal', new THREE.Float32BufferAttribute(normals2, 3))
-    geometry3.setAttribute('uv', new THREE.Float32BufferAttribute(uvs2, 2))
-
-    const mesh3 = new THREE.Mesh(geometry3, mesh.material)
-    mesh3.castShadow = true
-    mesh3.receiveShadow = true
-    mesh3.position.set(0, 1, 0)
-    app.add(mesh3)
-    mesh3.updateMatrixWorld()
+    const mesh1 = new THREE.Mesh(resultGeometries[1], material)
+    mesh1.position.set(0.5, 0, 2)
+    app.add(mesh1)
+    mesh1.updateMatrixWorld()
   })()
 
   useCleanup(() => {
