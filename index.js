@@ -10,7 +10,7 @@ export default () => {
   const meshes = [];
 
   ;(async () => {
-    const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
+    const map = new THREE.TextureLoader().load(baseUrl + 'uv_grid_opengl.jpg')
     const geometryToBeCut = new THREE.BoxGeometry();
     // const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
     const material = new THREE.MeshStandardMaterial({
