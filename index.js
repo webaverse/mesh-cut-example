@@ -29,8 +29,8 @@ export default () => {
 
     const map = new THREE.TextureLoader().load('https://raw.githubusercontent.com/gonnavis/annihilate/1a8536dc019924454a0fc7774a7dfa95a70aed92/image/uv_grid_opengl.jpg')
 
-    // const geometryToBeCut = new THREE.BoxGeometry(1, 1, 1)
-    let geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
+    const geometryToBeCut = new THREE.BoxGeometry(1, 1, 1)
+    // let geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
     window.geometryToBeCut = geometryToBeCut;
     // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
     const material = new THREE.MeshStandardMaterial({ map })
@@ -70,11 +70,13 @@ export default () => {
       geometryToBeCut.attributes.normal.count * 3, 
       geometryToBeCut.attributes.uv.array,
       geometryToBeCut.attributes.uv.count * 2,
-      index.array, 
-      index.count, 
+      index?.array, 
+      index?.count, 
 
       planeNormal, 
-      planeDistance
+      planeDistance,
+
+      !!geometryToBeCut.index
     )
 
     console.log(res)
@@ -103,6 +105,7 @@ export default () => {
     cube2.receiveShadow = true
     cube2.position.set(-1, 1, 0)
     // console.log('geometry2', geometry2)
+    window.cube2 = cube2;
 
     //debugger;
 
@@ -122,6 +125,7 @@ export default () => {
     cube3.receiveShadow = true
     cube3.position.set(0, 1, 0)
     // console.log('geometry3', geometry3)
+    window.cube3 = cube3;
 
     app.add(cube3)
 
@@ -129,23 +133,27 @@ export default () => {
 
     // --------------------------------------------------
     
-    geometryToBeCut = mergeVertices(geometry2);
+    // const geometryToBeCut2 = mergeVertices(geometry2);
+    const geometryToBeCut2 = geometry2;
+    window.geometryToBeCut2 = geometryToBeCut2;
     {
-      const index = geometryToBeCut.getIndex();
+      const index = geometryToBeCut2.getIndex();
       const planeNormal = new THREE.Vector3(0, 1, 0).normalize().toArray();
       const planeDistance = 0
       const res = physics.cutMesh(
-        geometryToBeCut.attributes.position.array, 
-        geometryToBeCut.attributes.position.count * 3, 
-        geometryToBeCut.attributes.normal.array, 
-        geometryToBeCut.attributes.normal.count * 3, 
-        geometryToBeCut.attributes.uv.array,
-        geometryToBeCut.attributes.uv.count * 2,
-        index.array, 
-        index.count, 
+        geometryToBeCut2.attributes.position.array, 
+        geometryToBeCut2.attributes.position.count * 3, 
+        geometryToBeCut2.attributes.normal.array, 
+        geometryToBeCut2.attributes.normal.count * 3, 
+        geometryToBeCut2.attributes.uv.array,
+        geometryToBeCut2.attributes.uv.count * 2,
+        index?.array, 
+        index?.count, 
 
         planeNormal, 
-        planeDistance
+        planeDistance,
+
+        !!geometryToBeCut2.index
       )
       // console.log({res})
 
