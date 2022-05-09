@@ -30,13 +30,11 @@ export default () => {
         geometry.attributes.normal.count * 3, 
         geometry.attributes.uv.array,
         geometry.attributes.uv.count * 2,
-        geometry.index?.array, 
+        geometry.index?.array, // Set to falsy to indicate that this is an non-indexed geometry
         geometry.index?.count, 
   
         plane.normal.toArray(), 
         plane.constant,
-  
-        !!geometry.index
       )
   
       const positions0 = res.outPositions.slice(0, res.numOutPositions[0])
