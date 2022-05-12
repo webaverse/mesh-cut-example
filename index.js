@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import metaversefile from 'metaversefile'
-const { useApp, useWear, useUse, usePhysics, useCleanup } = metaversefile
+const { useApp, useWear, useUse, usePhysics, useCleanup, useLoaders } = metaversefile
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1')
 
@@ -10,17 +10,24 @@ export default () => {
   const meshes = [];
 
   ;(async () => {
-    const map = new THREE.TextureLoader().load(baseUrl + 'uv_grid_opengl.jpg')
-    const geometryToBeCut = new THREE.BoxGeometry();
-    // const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
-    const material = new THREE.MeshStandardMaterial({
-      map,
-      side: THREE.DoubleSide,
-    })
-    const meshToBeCut = new THREE.Mesh(geometryToBeCut, material)
-    meshes.push(meshToBeCut);
-    app.add(meshToBeCut)
-    meshToBeCut.updateMatrixWorld()
+    // const map = new THREE.TextureLoader().load(baseUrl + 'uv_grid_opengl.jpg')
+    // const geometryToBeCut = new THREE.BoxGeometry();
+    // // const geometryToBeCut = new THREE.TorusKnotGeometry(); geometryToBeCut.scale(0.5, 0.5, 0.5);
+    // const material = new THREE.MeshStandardMaterial({
+    //   map,
+    //   side: THREE.DoubleSide,
+    // })
+    // const meshToBeCut = new THREE.Mesh(geometryToBeCut, material)
+    // meshes.push(meshToBeCut);
+    // app.add(meshToBeCut)
+    // meshToBeCut.updateMatrixWorld()
+
+    const u = `${baseUrl}trees.glb`;
+    let o = await new Promise((accept, reject) => {
+      const {gltfLoader} = useLoaders();
+      gltfLoader.load(u, accept, function onprogress() {}, reject);
+    });
+    window.o = o;
 
     const getCutGeometries = (geometry, plane) => {
       const res = physics.cutMesh(
@@ -58,6 +65,20 @@ export default () => {
 
       return [geometry0, geometry1];
     }
+    window.getCutGeometries = getCutGeometries;
+
+    // app.add(o.scene);
+    // return;
+
+    const lastTreeIndex = o.scene.children[0].children.length - 1;
+    const lastTree = o.scene.children[0].children[lastTreeIndex];
+    const geometryToBeCut = lastTree.geometry;
+    const material = lastTree.material;
+    app.add(lastTree);
+    lastTree.position.set(0, 0, 0);
+    lastTree.rotation.set(0, 0, 0);
+    lastTree.scale.set(1, 1, 1);
+    lastTree.updateMatrixWorld();
 
     const geometries2Parts = getCutGeometries(geometryToBeCut, new THREE.Plane(
       new THREE.Vector3(1, 0, 0).normalize(),
